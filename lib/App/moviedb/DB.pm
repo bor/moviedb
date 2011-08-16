@@ -41,6 +41,7 @@ sub dbh {
 sub add_movies {
     my ( $self, $movies ) = @_;
     my %stars;
+    $self->{dbh}->begin_work;
     my $sth = $self->{dbh}->prepare('INSERT INTO movie (title, year, format) VALUES (?,?,?)');
     foreach my $movie (@$movies) {
         $sth->execute( @$movie{qw(title year format)} );
@@ -48,8 +49,10 @@ sub add_movies {
         push @{ $stars{$_} }, $movie_id foreach @{ $movie->{stars} };
     }
     $sth->finish();
+    $self->{dbh}->commit;
 
     # add stars & movie_stars to DB
+    $self->{dbh}->begin_work;
     $sth = $self->{dbh}->prepare('INSERT INTO star (name) VALUES (?)');
     my $sth_ms = $self->{dbh}->prepare('INSERT INTO movie_star (movie_id, star_id) VALUES (?,?)');
     foreach my $name ( keys %stars ) {
@@ -61,6 +64,7 @@ sub add_movies {
     }
     $sth->finish();
     $sth_ms->finish();
+    $self->{dbh}->commit;
     return 1;
 }
 
