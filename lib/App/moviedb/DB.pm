@@ -64,6 +64,14 @@ sub add_movies {
     return 1;
 }
 
+# delete movie from DB
+sub del_movie {
+    my ( $self, $id ) = @_;
+    $self->{dbh}->do('DELETE FROM movie_star WHERE movie_id = ?', undef, $id);
+    my $r = $self->{dbh}->do('DELETE FROM movie WHERE movie_id = ?', undef, $id);
+    return $r;
+}
+
 # return: 
 sub get_movies {
     my ( $self, $params ) = @_;

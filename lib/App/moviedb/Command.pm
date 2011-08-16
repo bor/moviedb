@@ -46,7 +46,7 @@ sub act_add {
 sub act_del {
     my $self = shift;
     prompt( 'ID: ', '-integer' );
-    my $result = App::moviedb::Movie::del({ movie_id => $_ });
+    my $result = $self->{db}->del_movie($_);
     return $result ? 'Deleted successfully' : 'Cant delete: something wrong';
 }
 
