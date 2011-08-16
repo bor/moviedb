@@ -5,6 +5,7 @@ The interface is command line.
 Movie information stored persistently in database(like SQLite, MySQL, etc).
 For more information see perldoc App/moviedb.pm
 
+
 DEPENDENCIES
 
 perl v5.10+
@@ -12,6 +13,7 @@ Config::Tiny
 DBI
 DBD::SQLite / maybe another in future
 IO::Prompt
+Try::Tiny
 
 
 INSTALLATION

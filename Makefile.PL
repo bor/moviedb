@@ -15,6 +15,7 @@ WriteMakefile(
         'Config::Tiny'  => 0,
         'DBI'           => 0,
         'DBD::SQLite'   => 0,
+        'IO::Prompt'    => 0,
         'Try::Tiny'     => 0,
     },
     dist            => { COMPRESS => 'gzip -9f', SUFFIX => 'gz', },
