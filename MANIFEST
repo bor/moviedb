@@ -1,0 +1,19 @@
+bin/moviedb
+Changes
+conf/moviedb.conf.example
+conf/moviedb.schema.sql
+lib/App/moviedb.pm
+lib/App/moviedb/Command.pm
+lib/App/moviedb/DB.pm
+lib/App/moviedb/Movie.pm
+lib/App/moviedb/Movies.pm
+lib/App/moviedb/Star.pm
+MANIFEST			This list of files
+MANIFEST.SKIP
+README
+t/00.load.t
+t/02.command.t
+t/03.movie.t
+t/perlcritic.t
+t/pod-coverage.t
+t/pod.t

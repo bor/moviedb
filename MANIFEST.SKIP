@@ -1,0 +1,10 @@
+.git
+Makefile
+MYMETA.\w+$
+blib/
+conf/moviedb.conf$
+data/moviedb.sqlite
+pm_to_blib
+tmp/
+\.bak$
+\.swp$

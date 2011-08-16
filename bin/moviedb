@@ -1,0 +1,14 @@
+#!/usr/bin/perl
+# just simple bin wrapper
+package moviedb;
+
+use FindBin;
+use lib "$FindBin::Bin/../lib";
+use strict;
+use warnings;
+
+use App::moviedb;
+
+my $app = App::moviedb->new();
+$app->run();
+

@@ -1,0 +1,52 @@
+moviedb
+
+This simple app that implement a storage system for movies.
+The interface is command line.
+Movie information stored persistently in database(like SQLite, MySQL, etc).
+For more information see perldoc App/moviedb.pm
+
+DEPENDENCIES
+
+perl v5.10+
+Config::Tiny
+DBI
+DBD::SQLite / maybe another in future
+IO::Prompt
+
+
+INSTALLATION
+
+To install this app, run the following commands:
+
+	perl Makefile.PL
+	make
+	make test
+	make install (currently not supported)
+
+
+SETUP
+
+Create database
+  for SQLite like:
+    $ sqlite3 data/moviedb.sqlite < conf/moviedb.schema.sql
+  for MySQL like(not tested yet):
+    $ mysqladmin create moviedb
+    $ mysql -e "GRANT ALL PRIVILEGES ON moviedb.* TO moviedb@localhost IDENTIFIED BY 'password'"
+    $ mysql -umoviedb -ppassword moviedb < conf/moviedb.schema.sql
+    $ mysql -umoviedb -ppassword moviedb -e "ALTER TABLE movie MODIFY movie_id SERIAL; ALTER TABLE star MODIFY star_id SERIAL;"
+
+Copy conf/moviedb.conf.example to conf/moviedb.conf
+  and edit it
+
+
+USE
+
+Run bin/moviedb and analyze output
+
+
+COPYRIGHT AND LICENCE
+
+Copyright (C) 2011, Sergiy Borodych
+
+This library is free software; you can redistribute it and/or modify
+it under the same terms as Perl itself.

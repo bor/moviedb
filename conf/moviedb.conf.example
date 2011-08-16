@@ -1,0 +1,16 @@
+
+#
+# db settings
+[db]
+# SQLite (TODO: mysql/Pg)
+driver       = SQLite
+# for MySQL/Pg only
+#host         = localhost
+# for SQLite only, default main_dir/data
+dir          = data
+# .sqlite at end only for SQLite
+# for MySQL/Pg remove it
+name         = moviedb.sqlite
+#user         =
+#password     =
+

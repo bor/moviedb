@@ -1,0 +1,11 @@
+App-movie_db-*
+Makefile
+Makefile.old
+MYMETA.*
+blib*
+cover_db
+pm_to_blib
+tmp/
+*.bak
+*.tar.gz
+.*.swp
