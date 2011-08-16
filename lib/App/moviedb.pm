@@ -35,9 +35,11 @@ sub run {
         'action|a=s' => \$self->{opt}{act},
         'config|c=s' => \$self->{opt}{conf_file},
         'file|f=s'   => \$self->{opt}{file_in},
+        'help|h'     => \$self->{opt}{help},
     ) or die $self->usage();
-    $self->{opt}{act} ||= 'help';
-    die $self->usage() if $self->{opt}{act} eq 'help';
+    die $self->usage() if $self->{opt}{help};
+    die die "ERROR: Require some args\n" . $self->usage()
+      unless $self->{opt}{act};
 
     # call command
     my $command = App::moviedb::Command->new();
@@ -59,9 +61,9 @@ sub usage {
 Usage:
  $0 [-c path/to/config ] -a action_name [-f filename]
     -a      - do this action_name (some actions need additional params)
-	-c      - using alternative config, default: conf/moviedb.conf
-	-f      - use this file (for import ex.)
-	-h      - show this screen
+    -c      - using alternative config, default: conf/moviedb.conf
+    -f      - use this file (for import ex.)
+    -h      - show this screen
   where action_name:
     add             - add movie
     del             - delete movie
@@ -109,30 +111,23 @@ App::moviedb - simple movie database
 
 =head1 DESCRIPTION
 
-=for author to fill in:
-    Write a full description of the module and its features here.
-    Use subsections (=head2, =head3) as appropriate.
+This simple app that implement a storage system for movies.
+The interface is command line.
+Movie information stored persistently in database(like SQLite, MySQL, etc).
 
 =head1 CONFIGURATION AND ENVIRONMENT
 
-=for author to fill in:
-    A full explanation of any configuration system(s) used by the
-    module, including the names and locations of any configuration
-    files, and the meaning of any environment variables or properties
-    that can be set. These descriptions must also include details of any
-    configuration language used.
-  
-App::moviedb requires no configuration files or environment variables.
+App::moviedb requires configuration file for working.
+Usually it placed in conf/moviedb.conf.
 
 =head1 DEPENDENCIES
 
-=for author to fill in:
-    A list of all the other modules that this module relies upon,
-    including any restrictions on versions, and an indication whether
-    the module is part of the standard Perl distribution, part of the
-    module's distribution, or must be installed separately. ]
-
-None.
+perl v5.10+,
+Config::Tiny,
+DBI,
+DBD::SQLite / maybe another in future,
+IO::Prompt,
+Try::Tiny
 
 =head1 AUTHOR
 

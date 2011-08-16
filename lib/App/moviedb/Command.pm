@@ -79,36 +79,14 @@ sub act_find_by_star {
     return App::moviedb::Movies->new($movies)->as_string();
 }
 
-# import movies from text file
+# import movies from text file and add to DB
 sub act_import {
     my ( $self, $params ) = @_;
     die "Need input file\n" unless $params->{file_in};
-
+    # import movies from text file
     my $movies = $self->_import_txt_file($params->{file_in});
-
     # add movies to DB
-    # TODO : move this code to ::DB
-    my %stars;
-    my $sth = $self->{dbh}->prepare('INSERT INTO movie (title, year, format) VALUES (?,?,?)');
-    my $sth_s = $self->{dbh}->prepare('INSERT INTO star (name) VALUES (?)');
-    foreach my $movie (@$movies) {
-        $sth->execute( @$movie{qw(title year format)} );
-        my $movie_id = $self->{dbh}->last_insert_id( undef, undef, 'movie', 'movie_id' );
-        push @{ $stars{$_} }, $movie_id foreach @{ $movie->{stars} };
-    }
-    $sth->finish();
-    # add stars & movie_stars to DB
-    $sth = $self->{dbh}->prepare('INSERT INTO star (name) VALUES (?)');
-    my $sth_ms = $self->{dbh}->prepare('INSERT INTO movie_star (movie_id, star_id) VALUES (?,?)');
-    foreach my $name ( keys %stars ) {
-        $sth->execute($name);
-        my $star_id = $self->{dbh}->last_insert_id( undef, undef, 'star', 'star_id' );
-        foreach my $movie_id (@{$stars{$name}}) {
-            $sth_ms->execute($movie_id,$star_id);
-        }
-    }
-    $sth->finish();
-    $sth_ms->finish();
+    $self->{db}->add_movies($movies);
     return 'Import '. scalar(@$movies) .' movies done';
 }
 

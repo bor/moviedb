@@ -36,6 +36,35 @@ sub dbh {
     return $self->{dbh};
 }
 
+# add movies & stars to DB
+# return: hashref of araryrefs { star_name => [movie_id,...] }
+sub add_movies {
+    my ( $self, $movies ) = @_;
+    my %stars;
+    my $sth = $self->{dbh}->prepare('INSERT INTO movie (title, year, format) VALUES (?,?,?)');
+    foreach my $movie (@$movies) {
+        $sth->execute( @$movie{qw(title year format)} );
+        my $movie_id = $self->{dbh}->last_insert_id( undef, undef, 'movie', 'movie_id' );
+        push @{ $stars{$_} }, $movie_id foreach @{ $movie->{stars} };
+    }
+    $sth->finish();
+
+    # add stars & movie_stars to DB
+    $sth = $self->{dbh}->prepare('INSERT INTO star (name) VALUES (?)');
+    my $sth_ms = $self->{dbh}->prepare('INSERT INTO movie_star (movie_id, star_id) VALUES (?,?)');
+    foreach my $name ( keys %stars ) {
+        $sth->execute($name);
+        my $star_id = $self->{dbh}->last_insert_id( undef, undef, 'star', 'star_id' );
+        foreach my $movie_id (@{$stars{$name}}) {
+            $sth_ms->execute($movie_id,$star_id);
+        }
+    }
+    $sth->finish();
+    $sth_ms->finish();
+    return 1;
+}
+
+# return: 
 sub get_movies {
     my ( $self, $params ) = @_;
     my $query = q/
@@ -76,9 +105,9 @@ sub get_star {
 sub init_db {
     my $self = shift;
 	# TODO
-	die "Not implemented yet!";
-	my $schema_file = $self->{_conf_dir} . '/moviedb.schema.sql';
-    return $self;
+	die "Not implemented yet!\n";
+    #my $schema_file = $self->{_conf_dir} . '/moviedb.schema.sql';
+    #return $self;
 }
 
 1;
