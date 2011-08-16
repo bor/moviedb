@@ -41,7 +41,8 @@ sub new {
 sub add {
     my ( $class, $params ) = @_;
     my $self = bless $params, $class;
-    $self->{dbh} ||= App::moviedb::DB->new();
+    $self->{dbh} ||= App::moviedb::DB->new()->dbh();
+    # TODO : check if movie (title&year) already in DB
     # add movie info to DB
     $self->{dbh}->do(
         'INSERT INTO movie (title, year, format) VALUES (?,?,?)',

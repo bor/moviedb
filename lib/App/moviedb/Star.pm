@@ -11,7 +11,7 @@ use App::moviedb::DB;
 
 sub new {
     my ( $class, $params ) = @_;
-    $params->{dbh} ||= App::moviedb::DB->new();
+    $params->{dbh} ||= App::moviedb::DB->new()->dbh();
     my $info =
       $params->{dbh}->selectrow_hashref(
         'SELECT star_id, name FROM star WHERE name = ?',
