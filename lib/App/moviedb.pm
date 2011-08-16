@@ -50,9 +50,9 @@ sub run {
           catch { die "ERROR: $_\n" . $self->usage(); };
         say $result if $result;
     }
-	else {
-		die "ERROR: Bad action name\n" . $self->usage();
-	}
+    else {
+        die "ERROR: Bad action name\n" . $self->usage();
+    }
     return 1;
 }
 

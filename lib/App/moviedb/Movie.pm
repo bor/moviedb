@@ -35,6 +35,7 @@ sub new {
     return $self;
 }
 
+# TODO : move all DB related stuff to ::DB module
 # add movie to DB, class method
 # return: self (movie object)
 sub add {

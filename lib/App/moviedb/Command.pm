@@ -18,7 +18,6 @@ sub new {
     $params //= {};
     my $self = bless $params, $class;
     $self->{db} ||= App::moviedb::DB->new();
-    $self->{dbh} ||= $self->{db}->dbh();
     return $self;
 }
 
@@ -66,7 +65,7 @@ sub act_find {
         say 'Bad value';
     }
     my $movies = $self->{db}->get_movies({ where => { 'movie.title' => $_ } });
-    return App::moviedb::Movies->new($movies)->as_string();
+    return App::moviedb::Movies->new($movies)->as_string() || 'None found';
 }
 
 # find movies by star
@@ -76,7 +75,7 @@ sub act_find_by_star {
         say 'Bad value';
     }
     my $movies = $self->{db}->get_movies({ where => { 'star.name' => $_ } });
-    return App::moviedb::Movies->new($movies)->as_string();
+    return App::moviedb::Movies->new($movies)->as_string() || 'None found';
 }
 
 # import movies from text file and add to DB
@@ -94,14 +93,14 @@ sub act_import {
 sub act_list {
     my $self = shift;
     my $movies = $self->{db}->get_movie_list({ order_by => 'title' });
-    return App::moviedb::Movies->new($movies)->as_string();
+    return App::moviedb::Movies->new($movies)->as_string() || 'None found';
 }
 
 # list movies by year
 sub act_list_by_year {
     my $self = shift;
     my $movies = $self->{db}->get_movie_list({ order_by => 'year' });
-    return App::moviedb::Movies->new($movies)->as_string();
+    return App::moviedb::Movies->new($movies)->as_string() || 'None found';
 }
 
 #
