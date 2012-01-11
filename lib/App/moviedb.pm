@@ -18,12 +18,12 @@ use Try::Tiny;
 use App::moviedb::Command;
 
 sub new {
-    my $class = shift;
+    my ( $class, $params ) = @_;
     my $self = bless {}, $class;
-	# be sure to load config first
+    $self->{opt} = $params;
+    # be sure to load config first
     try { $self->conf() } catch { die "ERROR: $_\n" };
-    $self->{_dbh} = try { App::moviedb::DB->new( $self->conf('db') ); }
-    				catch { die "ERROR: $_\n" };
+    $self->{_dbh} = try { App::moviedb::DB->new( $self->conf('db') ); } catch { die "ERROR: $_\n" };
     return $self;
 }
 
@@ -36,22 +36,20 @@ sub run {
         'config|c=s' => \$self->{opt}{conf_file},
         'file|f=s'   => \$self->{opt}{file_in},
         'help|h'     => \$self->{opt}{help},
-    ) or die $self->usage();
-    die $self->usage() if $self->{opt}{help};
-    die die "ERROR: Require some args\n" . $self->usage()
+    ) or die $self->usage() . "\n";
+    die $self->usage() . "\n" if $self->{opt}{help};
+    die die "ERROR: Require some args\n" . $self->usage() . "\n"
       unless $self->{opt}{act};
 
     # call command
     my $command = App::moviedb::Command->new();
-    my $method = 'act_' . delete $self->{opt}{act};
+    my $method  = 'act_' . delete $self->{opt}{act};
     if ( $command->can($method) ) {
-        my $result =
-          try { $command->$method( $self->{opt} ); }
-          catch { die "ERROR: $_\n" . $self->usage(); };
+        my $result = try { $command->$method( $self->{opt} ); } catch { die "ERROR: $_\n" . $self->usage() . "\n"; };
         say $result if $result;
     }
     else {
-        die "ERROR: Bad action name\n" . $self->usage();
+        die "ERROR: Bad action name\n" . $self->usage() . "\n";
     }
     return 1;
 }
@@ -81,17 +79,17 @@ sub conf {
     my ( $self, $what ) = @_;
     # load config if need
     unless ( $self->{_conf} ) {
-    	$self->{_conf_dir} ||= "$FindBin::Bin/../conf";
-    	my $conf_file = $self->{opt}{conf_file}
-    	  || $self->{_conf_dir} . '/moviedb.conf';
-    	if ( -e $conf_file ) {
-    	    $self->{_conf} = Config::Tiny->read($conf_file)
-    	      or die "Cant load config file $conf_file: " . Config::Tiny->errstr;
-    	}
-    	else {
-    	    die "Cant find config file $conf_file\n";
-    	}
-	}
+        $self->{_conf_dir} ||= "$FindBin::Bin/../conf";
+        my $conf_file = $self->{opt}{conf_file}
+          || $self->{_conf_dir} . '/moviedb.conf';
+        if ( -e $conf_file ) {
+            $self->{_conf} = Config::Tiny->read($conf_file)
+              or die "Cant load config file $conf_file: " . Config::Tiny->errstr . "\n";
+        }
+        else {
+            croak "Cant find config file $conf_file";
+        }
+    }
     return $what ? $self->{_conf}{$what} : $self->{_conf};
 }
 
