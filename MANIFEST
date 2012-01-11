@@ -1,3 +1,4 @@
+.perlcriticrc
 bin/moviedb
 Changes
 conf/moviedb.conf.example
@@ -13,7 +14,8 @@ MANIFEST.SKIP
 README
 t/00.load.t
 t/02.command.t
-t/03.movie.t
 t/perlcritic.t
 t/pod-coverage.t
 t/pod.t
+t/test.conf
+t/test_movies.txt
