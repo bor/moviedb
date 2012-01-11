@@ -1,6 +1,6 @@
 #!perl
 
-use lib qw( lib );
+use lib 'lib';
 use strict;
 use warnings;
 
@@ -13,6 +13,8 @@ if ($@) {
     plan skip_all => 'DBD::SQLite required to run these tests';
 }
 
+use_ok('App::moviedb::DB');
+
 my $class = 'App::moviedb::Command';
 use_ok($class);
 
@@ -20,10 +22,8 @@ use_ok($class);
 my $app = App::moviedb->new( { conf_file => 't/test.conf' } );
 
 # init test DB
-open( my $fh, '<', 'conf/moviedb.schema.sql' ) or die "Cant open sql schema file: $!\n";
-my $sql = do { local $/; <$fh> };
-close($fh);
-App::moviedb::DB->new()->dbh()->do($_) foreach split( ';', $sql );    # simple sql split by ';'
+eval { App::moviedb::DB->new()->init_db(); };    ## no critic (ErrorHandling::RequireCheckingReturnValueOfEval)
+ok( !$@, 'init test DB' );
 
 my $obj = $class->new();
 isa_ok( $obj, $class );
@@ -33,7 +33,7 @@ can_ok( $obj, @methods );
 
 # empty list
 my $result = $obj->act_list();
-ok( $result eq 'None found', 'empty list');
+ok( $result eq 'None found', 'empty list' );
 
 # import
 $result = eval { $obj->act_import( { file_in => 't/test_movies.txt' } ); };
@@ -41,6 +41,6 @@ ok( !$@ && $result, 'import from file: ' . ( $result || 'error: ' . $@ ) );
 
 # list
 $result = $obj->act_list();
-like($result, qr/^\nID:/, 'list');
+like( $result, qr/^\nID:/, 'list' );
 
 done_testing();

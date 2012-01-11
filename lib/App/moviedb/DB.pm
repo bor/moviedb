@@ -10,6 +10,7 @@ our $VERSION = 0.01;
 use DBI;
 use DBD::SQLite;
 
+# singleton
 my $db;
 
 sub new {
@@ -112,14 +113,18 @@ sub get_star {
     return $star;
 }
 
-# create db file and connect to it
-# return: dbh
+# init DB from schema
 sub init_db {
-    my $self = shift;
-	# TODO
-	die "Not implemented yet!\n";
-    #my $schema_file = $self->{_conf_dir} . '/moviedb.schema.sql';
-    #return $self;
+    my ( $self, $schema_file ) = @_;
+    $schema_file ||= 'conf/moviedb.schema.sql';
+
+    # read sql schema
+    open( my $fh, '<', $schema_file ) or die "Cant open sql schema file: $!\n";
+    my $sql = do { local $/ = undef; <$fh> };
+    close($fh);
+
+    $self->dbh()->do($_) foreach split( ';', $sql );    # simple sql split by ';'
+    return $self;
 }
 
 1;
