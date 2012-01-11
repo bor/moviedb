@@ -87,7 +87,7 @@ sub conf {
               or die "Cant load config file $conf_file: " . Config::Tiny->errstr . "\n";
         }
         else {
-            croak "Cant find config file $conf_file";
+            die "Cant find config file $conf_file\n";
         }
     }
     return $what ? $self->{_conf}{$what} : $self->{_conf};
