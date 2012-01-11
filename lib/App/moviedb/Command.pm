@@ -122,7 +122,7 @@ sub _import_txt_file {
         'Stars'        => 'stars',
     );
     my $field_re = qr/[\w\s\-:,]+/;
-    open( my $fh, '<', $filename );
+    open( my $fh, '<', $filename );    ## no critic (InputOutput::RequireBriefOpen) # perlcritic bug ?
     while (<$fh>) {
         chomp();
         next unless $_;
