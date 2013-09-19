@@ -111,7 +111,7 @@ App::moviedb - simple movie database
 
 This simple app that implement a storage system for movies.
 The interface is command line.
-Movie information stored persistently in database(like SQLite, MySQL, etc).
+Movie information stored persistently in database (like L<SQLite|https://sqlite.org/>, MySQL, etc).
 
 =head1 CONFIGURATION AND ENVIRONMENT
 
@@ -121,11 +121,11 @@ Usually it placed in conf/moviedb.conf.
 =head1 DEPENDENCIES
 
 perl v5.10+,
-Config::Tiny,
-DBI,
-DBD::SQLite / maybe another in future,
-IO::Prompt,
-Try::Tiny
+L<Config::Tiny>,
+L<DBI>,
+L<DBD::SQLite> / maybe another in future,
+L<IO::Prompt>,
+L<Try::Tiny>
 
 =head1 AUTHOR
 
