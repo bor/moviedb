@@ -1,15 +1,15 @@
 package App::moviedb::Movies;
 
-use lib qw( lib );
+use lib 'lib';
 use warnings;
 use strict;
 
-our $VERSION = 0.01;
+our $VERSION = 0.002;
 
-# input: expect arrayref as $params
+# input: expect $list as arrayref of hashrefs
 sub new {
-    my ( $class, $params ) = @_;
-    my $self = bless $params, $class;
+    my ( $class, $list ) = @_;
+    my $self = bless $list, $class;
     return $self;
 }
 
@@ -17,7 +17,7 @@ sub new {
 sub as_string {
     my $self = shift;
     my $result;
-    foreach my $movie ( @{ $self } ) {
+    foreach my $movie ( @{$self} ) {
         $result .= "ID: $movie->{movie_id}\tTitle: $movie->{title}\n";
     }
     $result = "\n" . $result if $result;
@@ -27,6 +27,8 @@ sub as_string {
 1;
 
 __END__
+
+=for stopwords hashrefs
 
 =head1 NAME
 
@@ -42,9 +44,20 @@ App::moviedb::Movies
 
 Simple implementation for display result for collection of movies.
 
+=head1 METHODS
+
+=head2 new($list)
+
+Create a object.
+Expect C<$list> as arrayref of hashrefs.
+
+=head2 as_string()
+
+Return movies list as string (multiple line).
+
 =head1 SEE ALSO
 
-App::moviedb
+L<App::moviedb>, L<App::moviedb::Movie>
 
 =head1 AUTHOR
 
