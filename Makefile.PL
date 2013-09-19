@@ -23,7 +23,7 @@ WriteMakefile(
 );
 
 
-# using perl v5.10 is a bad idea though (it not supported and now we have v5.14 already)
+# using perl v5.10 is a bad idea though (it not supported and now we have v5.18+ already)
 warn <<'EOF' if $] <= 5.012;
 
 *******************************************************************************
