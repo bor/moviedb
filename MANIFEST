@@ -14,8 +14,14 @@ MANIFEST.SKIP
 README
 t/00.load.t
 t/02.command.t
-t/perlcritic.t
-t/pod-coverage.t
-t/pod.t
+t/91_strict.t
+t/93_pod_syntax.t
+t/94_pod_coverage.t
+t/94_pod_spelling.t
+t/96_eol.t
+t/96_fixme.t
+t/98_perlcritic.t
+t/99_code_coverage.t
+t/99_complexity.t
 t/test.conf
 t/test_movies.txt

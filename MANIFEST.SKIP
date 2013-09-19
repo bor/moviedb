@@ -3,6 +3,7 @@ Makefile
 MYMETA.\w+$
 blib/
 conf/moviedb.conf$
+cover_db/
 data/moviedb.sqlite
 pm_to_blib
 tmp/
