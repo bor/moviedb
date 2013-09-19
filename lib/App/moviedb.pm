@@ -1,11 +1,11 @@
 package App::moviedb;
 
 use 5.010;
-use lib qw( lib );
+use lib 'lib';
 use warnings;
 use strict;
 
-our $VERSION = 0.01;
+our $VERSION = 0.002;
 
 use Carp;
 use Config::Tiny;
@@ -113,6 +113,27 @@ This simple app that implement a storage system for movies.
 The interface is command line.
 Movie information stored persistently in database (like L<SQLite|https://sqlite.org/>, MySQL, etc).
 
+=head1 METHODS
+
+=head2 new()
+
+Create object. Also try to create database connection.
+
+=head2 run()
+
+Main method. Resolve command line arguments and try to find appropriate action in L<App::moviedb::Command>.
+
+=head2 usage()
+
+Returns fine-formatted usage text.
+
+=head2 conf()
+
+=head2 conf($key)
+
+Returns all config hashref or some part of config if C<$key> passed.
+Load configuration file automatically.
+
 =head1 CONFIGURATION AND ENVIRONMENT
 
 App::moviedb requires configuration file for working.
@@ -126,6 +147,10 @@ L<DBI>,
 L<DBD::SQLite> / maybe another in future,
 L<IO::Prompt>,
 L<Try::Tiny>
+
+=head1 SEE ALSO
+
+L<App::moviedb::Command>
 
 =head1 AUTHOR
 
