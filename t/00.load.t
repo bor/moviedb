@@ -10,4 +10,4 @@ BEGIN {
     use_ok('App::moviedb');
 }
 
-diag("Testing App::moviedb $App::moviedb::VERSION");
+note 'Testing App::moviedb ' . App::moviedb->VERSION() . ", Perl $], $^X";
