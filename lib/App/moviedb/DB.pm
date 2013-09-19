@@ -5,7 +5,7 @@ use lib qw( lib );
 use warnings;
 use strict;
 
-our $VERSION = 0.01;
+our $VERSION = 0.002;
 
 use DBI;
 use DBD::SQLite;
@@ -41,8 +41,10 @@ sub dbh {
 # return: hashref of araryrefs { star_name => [movie_id,...] }
 sub add_movies {
     my ( $self, $movies ) = @_;
+
     my %stars;
     $self->{dbh}->begin_work;
+    # add movies to DB
     my $sth = $self->{dbh}->prepare('INSERT INTO movie (title, year, format) VALUES (?,?,?)');
     foreach my $movie (@$movies) {
         $sth->execute( @$movie{qw(title year format)} );
@@ -66,10 +68,12 @@ sub add_movies {
     $sth->finish();
     $sth_ms->finish();
     $self->{dbh}->commit;
+
     return 1;
 }
 
 # delete movie from DB
+# return: status as true/false
 sub del_movie {
     my ( $self, $id ) = @_;
     $self->{dbh}->do('DELETE FROM movie_star WHERE movie_id = ?', undef, $id);
@@ -77,7 +81,8 @@ sub del_movie {
     return $r;
 }
 
-# return: 
+# search movies by filter (movie.title, star.name)
+# return: araryref of hashrefs [ { movie_id => , title => ... } ]
 sub get_movies {
     my ( $self, $params ) = @_;
     my $query = q/
@@ -142,7 +147,7 @@ App::moviedb::DB
 
 =head1 DESCRIPTION
 
-This class create dbh singleton.
+This class create C<dbh> singleton.
 
 =head1 AUTHOR
 
