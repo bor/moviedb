@@ -1,11 +1,11 @@
 package App::moviedb::Command;
 
 use 5.010;
-use lib qw( lib );
+use lib 'lib';
 use warnings;
 use strict;
 
-our $VERSION = 0.01;
+our $VERSION = 0.002;
 
 use IO::Prompt;
 
@@ -154,25 +154,53 @@ sub _import_txt_file {
 
 __END__
 
+=for stopwords del
+
 =head1 NAME
 
 App::moviedb::Command
 
 =head1 SYNOPSIS
 
-	# using inside App::moviedb
+    # using inside App::moviedb
     use App::moviedb::Command;
     my $command = App::moviedb::Command->new();
-	my $command_method = 'add';
+    my $command_method = 'add';
     $command->$command_method(@ARGV) if $command->can($command_method);
 
 =head1 DESCRIPTION
 
 Collection of command/action methods for App::moviedb.
 
+=head1 METHODS (ACTIONS)
+
+Each action method name start with 'act_' prefix.
+
+List of methods:
+
+=over
+
+=item * add
+
+=item * del
+
+=item * display
+
+=item * find
+
+=item * find_by_star
+
+=item * import
+
+=item * list
+
+=item * list_by_year.
+
+=back
+
 =head1 SEE ALSO
 
-App::moviedb
+L<App::moviedb>
 
 =head1 AUTHOR
 
