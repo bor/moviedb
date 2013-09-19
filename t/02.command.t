@@ -5,25 +5,27 @@ use strict;
 use warnings;
 
 use App::moviedb;
-
 use Test::More;
 
-eval { require DBD::SQLite; };    ## no critic (ErrorHandling::RequireCheckingReturnValueOfEval)
-if ($@) {
-    plan skip_all => 'DBD::SQLite required to run these tests';
-}
+eval "use DBD::SQLite;";    ## no critic (BuiltinFunctions::ProhibitStringyEval)
+plan skip_all => 'DBD::SQLite required to run these tests' if $@;
 
+use_ok('App::moviedb');
 use_ok('App::moviedb::DB');
-
-my $class = 'App::moviedb::Command';
-use_ok($class);
 
 # init dbh singleton here
 my $app = App::moviedb->new( { conf_file => 't/test.conf' } );
+isa_ok( $app, 'App::moviedb' );
 
 # init test DB
-eval { App::moviedb::DB->new()->init_db(); };    ## no critic (ErrorHandling::RequireCheckingReturnValueOfEval)
+my $db = eval { App::moviedb::DB->new()->init_db(); };
 ok( !$@, 'init test DB' );
+isa_ok( $db, 'App::moviedb::DB' );
+
+# tests
+
+my $class = 'App::moviedb::Command';
+use_ok($class);
 
 my $obj = $class->new();
 isa_ok( $obj, $class );
@@ -31,16 +33,21 @@ isa_ok( $obj, $class );
 my @methods = map { 'act_' . $_ } qw( add del display find find_by_star import list list_by_year );
 can_ok( $obj, @methods );
 
-# empty list
+## list, empty
 my $result = $obj->act_list();
-ok( $result eq 'None found', 'empty list' );
+is( $result, 'None found', 'empty list' );
 
-# import
+## import
 $result = eval { $obj->act_import( { file_in => 't/test_movies.txt' } ); };
-ok( !$@ && $result, 'import from file: ' . ( $result || 'error: ' . $@ ) );
+ok( !$@, 'import from file, no error' );
+like( $result, qr/Import \d+ movies done/, 'import from file, check result' );
 
-# list
+## list
 $result = $obj->act_list();
-like( $result, qr/^\nID:/, 'list' );
+like( $result, qr/^\nID:/, 'list()' );
+
+## list_by_year
+$result = $obj->act_list_by_year();
+like( $result, qr/^\nID:/, 'list_by_year()' );
 
 done_testing();
