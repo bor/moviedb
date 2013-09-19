@@ -1,12 +1,13 @@
 package App::moviedb::Movie;
 
 use 5.010;
-use lib qw( lib );
+use lib 'lib';
 use warnings;
 use strict;
 
-our $VERSION = 0.01;
 our @EXPORT_OK = qw( %fields %field_titles );
+
+our $VERSION = 0.002;
 
 use App::moviedb::DB;
 use App::moviedb::Star;
@@ -115,9 +116,19 @@ App::moviedb::Movie
 
 Simple implementation for movie object.
 
+=head1 METHODS
+
+=head2 new($params)
+
+Create a object.
+
+=head2 as_string()
+
+Returns string with movie details (multiple line).
+
 =head1 SEE ALSO
 
-App::moviedb
+L<App::moviedb>
 
 =head1 AUTHOR
 
